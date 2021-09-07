@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   SafeAreaView,
   Text,
@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
 
   const onPressItem = async id => {
     await dispatch(getJobDetails(token, id))
-    navigation.push('Details')
+    navigation.navigate('Details')
   }
 
   const renderItem = data => {
@@ -49,7 +49,7 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.pop()}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Icon name={'chevron-back'} size={42} color={'purple'} />
       </TouchableOpacity>
       <FlatList
@@ -60,7 +60,11 @@ const Home = ({ navigation }) => {
       />
 
       {isLoading && (
-        <ActivityIndicator size="large" style={styles.activityIndicator} />
+        <ActivityIndicator
+          color="#fff"
+          size="large"
+          style={styles.activityIndicator}
+        />
       )}
     </SafeAreaView>
   )

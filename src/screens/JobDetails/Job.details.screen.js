@@ -20,7 +20,7 @@ const JobDetails = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.pop()}>
+      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
         <Icon name={'chevron-back'} size={42} color={'purple'} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.item}>

@@ -23,7 +23,7 @@ export const getTokenRequest = (username, password) => async dispatch => {
   try {
     dispatch(tokenRequest())
 
-    const { data } = await fetch(url, {
+    return fetch(url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -34,14 +34,16 @@ export const getTokenRequest = (username, password) => async dispatch => {
       .then(response => response.json())
       .then(responseJson => {
         const returnObj = responseJson
-        console.log('data', returnObj.access_token)
+        // console.log('data', returnObj.access_token)
         dispatch(tokenSuccess(returnObj.access_token))
-        // console.log('returnObj', returnObj.access_token)
+        return returnObj.access_token
       })
       .catch(error => {
         dispatch(tokenFailed())
+        return false
       })
   } catch (error) {
     dispatch(tokenFailed())
+    return false
   }
 }

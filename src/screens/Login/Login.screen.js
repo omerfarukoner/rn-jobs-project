@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   SafeAreaView,
   View,
@@ -9,25 +9,27 @@ import {
   ActivityIndicator
 } from 'react-native'
 import styles from './Login.style'
-import Icon from 'react-native-vector-icons/Ionicons'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { getTokenRequest } from '../../stores/actions/token.action'
 import { getJobs } from '../../stores/actions/job.action'
 const Login = ({ navigation }) => {
   const dispatch = useDispatch()
-  const token = useSelector(state => state.tokenReducer.token)
   const isLoading = useSelector(state => state.jobReducer.isLoading)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const handleLogIn = async value => {
+    await dispatch(getJobs(value))
+    navigation.navigate('Home')
+  }
+
   const onPressLogin = async () => {
-    await dispatch(getTokenRequest(username, password))
-    await dispatch(getJobs(token))
-    if (token != null && !isLoading) {
-      return navigation.navigate('Home')
+    const tokenTemp = await dispatch(getTokenRequest(username, password))
+    if (!tokenTemp) {
+      return alert('Wrong Password/Username!')
     }
-    return alert('Wrong Password/Username!')
+    handleLogIn(tokenTemp)
   }
   return (
     <>
@@ -46,7 +48,7 @@ const Login = ({ navigation }) => {
           <View style={styles.inputView}>
             <TextInput
               style={styles.textInput}
-              placeholder="Password."
+              placeholder="Password"
               placeholderTextColor="#003f5c"
               secureTextEntry={true}
               onChangeText={password => setPassword(password)}
@@ -58,7 +60,11 @@ const Login = ({ navigation }) => {
         </View>
       </SafeAreaView>
       {isLoading && (
-        <ActivityIndicator size="large" style={styles.activityIndicator} />
+        <ActivityIndicator
+          color="#fff"
+          size="large"
+          style={styles.activityIndicator}
+        />
       )}
     </>
   )
